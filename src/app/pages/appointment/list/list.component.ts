@@ -13,12 +13,20 @@ import { MatDialog } from '@angular/material/dialog';
 export class ListComponent implements OnInit {
 
   list: Observable<Appointment[]> = null;
+  dataSource: Appointment[] = null;
+  displayedColumns: string[] = ['category', 'status', 'startDate', 'endDate', 'description', 'contactMediums', 'relatedEntities', 'lastUpdate']
 
   constructor(private service: FbBaseService<Appointment>, private dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.getAll();
-    console.log(this.list);
+    this.list.subscribe(
+      list => {
+        this.dataSource = list;
+        console.log(list);
+
+      }
+    );
   }
 
   getAll(): void {

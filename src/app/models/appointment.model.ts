@@ -10,16 +10,16 @@ export interface Appointment {
     status: AppointmentStateType;
 
     // validFor
-    startDateTime?: Date;
-    endDateTime?: Date;
+    startDate?: Date;
+    endDate?: Date;
     // validFor ends
 
     // urleket tartalmazó string tömb
     // pl.: google doksin megosztott fájlok
-    attachment?: string[];
+    // attachment?: string[];
     // telefoncím, email, skypeazonosító, akármi
-    contactMedium?: string[];
-    relatedEntity?: string[];
-    relatedParty?: string[];
+    contactMediums?: { name: string, value: string };
+    // nevek
+    relatedEntities?: string[];
     relatedPlace?: string;
 }
