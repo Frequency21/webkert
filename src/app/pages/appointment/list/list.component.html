@@ -1,5 +1,3 @@
-<mat-card>list works!</mat-card>
-
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
   <ng-container matColumnDef="category">
@@ -10,19 +8,21 @@
   <!-- kéne majd színezni a status alapján! -->
   <ng-container matColumnDef="status">
     <th mat-header-cell *matHeaderCellDef> Status </th>
-    <td mat-cell *matCellDef="let appointment"> {{ appointment.status }} </td>
+    <td mat-cell *matCellDef="let appointment" [ngClass]="{'initial': appointment.status == 'initial'}">
+      {{ appointment.status || '--' }} </td>
   </ng-container>
 
-
-  <!-- hoverre kiírhatná az órát:percet! -->
   <ng-container matColumnDef="startDate">
     <th mat-header-cell *matHeaderCellDef> Starting </th>
-    <td mat-cell *matCellDef="let appointment"> {{ appointment.startDate * 1000 | date: 'short' || '--' }} </td>
+    <td mat-cell *matCellDef="let appointment" [matTooltip]="getHourAndMin(appointment.startDate?.seconds * 1000)"
+      matTooltipPosition="above"> {{ (appointment.startDate.seconds * 1000 | date : 'mediumDate' ) || '--' }} </td>
   </ng-container>
 
   <ng-container matColumnDef="endDate">
     <th mat-header-cell *matHeaderCellDef> Ending </th>
-    <td mat-cell *matCellDef="let appointment"> {{ appointment.endDate ? (appointment.endDate * 1000 | date: 'short') : '--' }} </td>
+    <td mat-cell *matCellDef="let appointment" [matTooltip]="getHourAndMin(appointment.endDate?.seconds * 1000)"
+      matTooltipPosition="above">
+      {{ appointment.endDate ? (appointment.endDate.seconds * 1000 | date : 'mediumDate' ) : '--' }} </td>
   </ng-container>
 
   <ng-container matColumnDef="description">
@@ -44,20 +44,36 @@
   <ng-container matColumnDef="relatedEntities">
     <th mat-header-cell *matHeaderCellDef> Participants </th>
     <td mat-cell *matCellDef="let appointment">
-      <ul id='relatedEntities'>
-        <li *ngFor="let participant of appointment.relatedEntities">
-          {{participant}} <br />
-        </li>
-      </ul>
+      <ng-container *ngIf="appointment.relatedEntities !== null; else Else">
+        <ul id='relatedEntities'>
+          <li *ngFor="let participant of appointment.relatedEntities">
+            {{participant}} <br />
+          </li>
+        </ul>
+      </ng-container>
+      <ng-template #Else>
+        <p>--</p>
+      </ng-template>
     </td>
   </ng-container>
 
   <ng-container matColumnDef="lastUpdate">
     <th mat-header-cell *matHeaderCellDef> Date of creation </th>
-    <td mat-cell *matCellDef="let appointment"> {{ appointment.lastUpdate.seconds * 1000 | date: 'medium' }} </td>
+    <td mat-cell *matCellDef="let appointment" [matTooltip]="getHourAndMin(appointment.lastUpdate?.seconds * 1000)"
+      matTooltipPosition="above"> {{ appointment.lastUpdate.seconds * 1000 | date : 'mediumDate' }} </td>
   </ng-container>
 
-  <!-- ['category', 'status', 'startDateTime', 'endDateTime', 'description', 'contactMediums', 'relatedEntities', 'lastUpdate'] -->
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef></th>
+    <td mat-cell *matCellDef>
+      <button mat-icon-button>
+        <mat-icon>edit</mat-icon>
+      </button>
+      <button mat-icon-button>
+        <mat-icon>delete</mat-icon>
+      </button>
+    </td>
+  </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
