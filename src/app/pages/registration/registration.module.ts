@@ -7,6 +7,7 @@ import { RegistrationComponent } from './registration.component';
   declarations: [RegistrationComponent],
   imports: [
     CommonModule, RegistrationRoutingModule
-  ]
+  ],
+  exports: [ RegistrationComponent ]
 })
 export class RegistrationModule { }

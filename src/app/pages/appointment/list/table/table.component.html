@@ -1,0 +1,84 @@
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+  <ng-container matColumnDef="category">
+    <th mat-header-cell *matHeaderCellDef> Category </th>
+    <td mat-cell *matCellDef="let appointment"> {{ appointment.category }} </td>
+  </ng-container>
+
+  <!-- kéne majd színezni a status alapján! -->
+  <ng-container matColumnDef="status">
+    <th mat-header-cell *matHeaderCellDef> Status </th>
+    <td mat-cell *matCellDef="let appointment" [ngClass]="{'initial': appointment.status == 'initial'}">
+      {{ appointment.status || '--' }} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="startDate">
+    <th mat-header-cell *matHeaderCellDef> Starting </th>
+    <td mat-cell *matCellDef="let appointment"
+      [matTooltip]="getHourAndMin(appointment.validFor.startDate?.seconds * 1000)" matTooltipPosition="above">
+      {{ appointment.validFor.startDate ? (appointment.validFor.startDate.seconds * 1000 | date : 'mediumDate') : '--' }}
+    </td>
+  </ng-container>
+  
+  <ng-container matColumnDef="endDate">
+    <th mat-header-cell *matHeaderCellDef> Ending </th>
+    <td mat-cell *matCellDef="let appointment"
+    [matTooltip]="getHourAndMin(appointment.validFor.endDate?.seconds * 1000)" matTooltipPosition="above">
+      {{ appointment.validFor.endDate ? (appointment.validFor.endDate.seconds * 1000 | date : 'mediumDate') : '--' }}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="description">
+    <th mat-header-cell *matHeaderCellDef> Description </th>
+    <td mat-cell *matCellDef="let appointment"> {{ appointment.description}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="contactMediums">
+    <th mat-header-cell *matHeaderCellDef> Contact mediums </th>
+    <td mat-cell *matCellDef="let appointment">
+      <ul id='contactMediums'>
+        <li *ngFor="let medium of appointment.contactMediums">
+          {{medium.name}}: {{medium.value}} <br />
+        </li>
+      </ul>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="relatedEntities">
+    <th mat-header-cell *matHeaderCellDef> Participants </th>
+    <td mat-cell *matCellDef="let appointment">
+      <ng-container *ngIf="appointment.relatedEntities !== null; else Else">
+        <ul id='relatedEntities'>
+          <li *ngFor="let participant of appointment.relatedEntities">
+            {{participant}} <br />
+          </li>
+        </ul>
+      </ng-container>
+      <ng-template #Else>
+        <p>--</p>
+      </ng-template>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="lastUpdate">
+    <th mat-header-cell *matHeaderCellDef> Date of creation </th>
+    <td mat-cell *matCellDef="let appointment" [matTooltip]="getHourAndMin(appointment.lastUpdate?.seconds * 1000)"
+      matTooltipPosition="above"> {{ appointment.lastUpdate.seconds * 1000 | date : 'mediumDate' }} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef></th>
+    <td mat-cell *matCellDef>
+      <button mat-icon-button>
+        <mat-icon>edit</mat-icon>
+      </button>
+      <button mat-icon-button>
+        <mat-icon>delete</mat-icon>
+      </button>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+</table>

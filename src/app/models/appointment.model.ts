@@ -8,17 +8,11 @@ export interface Appointment {
     description: string;
     lastUpdate: Date;
     status: AppointmentStateType;
+    validFor?: { startDate?: Date, endDate?: Date };
 
-    // validFor
-    startDate?: Date;
-    endDate?: Date;
-    // validFor ends
-
-    // urleket tartalmazó string tömb
-    // pl.: google doksin megosztott fájlok
-    // attachment?: string[];
     // telefoncím, email, skypeazonosító, akármi
     contactMediums?: { name: string, value: string };
+
     // nevek
     relatedEntities?: string[];
     relatedPlace?: string;

@@ -12,7 +12,8 @@ export class AddComponent implements OnInit {
 
   constructor(private service: FbBaseService<Appointment>, private dialog: MatDialog) { }
 
-  ngOnInit(): void {
-  }
+  
+
+  ngOnInit(): void { }
 
 }
