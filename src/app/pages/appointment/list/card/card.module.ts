@@ -1,13 +1,21 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { CardComponent } from './card.component';
+import { CardRoutingModule } from './card-routing.module';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { DisplayModule } from './display/display.module';
 
 
 
 @NgModule({
   declarations: [CardComponent],
   imports: [
-    CommonModule
-  ]
+    CommonModule,
+    CardRoutingModule,
+    MatDialogModule,
+    DisplayModule
+  ],
+  providers: [DatePipe]
 })
 export class CardModule { }

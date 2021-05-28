@@ -1,0 +1,65 @@
+<mat-card class="mat-elevation-z8 appointment-card">
+  <mat-card-header>
+    <mat-card-title>
+      {{appointment.category}}
+    </mat-card-title>
+    <mat-card-subtitle>
+      {{appointment.description}}
+      <p class="status">{{appointment.status}}</p>
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <ul>
+      <li *ngIf="appointment.contactMediums !== null">
+        Contact mediums:
+        <ul>
+          <li *ngFor="let medium of appointment.contactMediums">
+            {{medium.name}}: {{medium.value}}
+          </li>
+        </ul>
+      </li>
+      <ng-container *ngIf="appointment.relatedEntities !== null; else noPart">
+        <li>
+          Participants:
+          <ul>
+            <li *ngFor="let participant of appointment.relatedEntities">
+              {{participant}}
+            </li>
+          </ul>
+        </li>
+      </ng-container>
+      <ng-template #noPart>
+        <li>no participants</li>
+      </ng-template>
+      <li>
+        <ng-container *ngIf="appointment.validFor.startDate; else noStartDate">
+          Starting at: {{appointment.validFor.startDate.toMillis() | date: 'dd/MM/yyyy HH:mm'}}
+        </ng-container>
+        <ng-template #noStartDate>
+          No starting date
+        </ng-template>
+      </li>
+
+      <li>
+        <ng-container *ngIf="appointment.validFor.endDate; else noEndDate">
+          Ending at: {{appointment.validFor.endDate.toMillis() | date: 'dd/MM/yyyy HH:mm'}}
+        </ng-container>
+        <ng-template #noEndDate>
+          No ending date
+        </ng-template>
+      </li>
+      
+      <li>
+        Last update: {{appointment.lastUpdate.toMillis() | date: 'dd/MM/yyyy HH:mm'}}
+      </li>
+    </ul>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-icon-button>
+      <mat-icon>edit</mat-icon>
+    </button>
+    <button mat-icon-button>
+      <mat-icon>delete</mat-icon>
+    </button>
+  </mat-card-actions>
+</mat-card>

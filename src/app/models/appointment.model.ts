@@ -1,17 +1,18 @@
 import { AppointmentStateType } from "./appointment-statetype.model";
+import firebase from 'firebase';
+import Timestamp = firebase.firestore.Timestamp;
 
 export interface Appointment {
     id: string;
     // üzleti? magán?
     category: string;
-    creationDate: Date;
     description: string;
-    lastUpdate: Date;
+    lastUpdate: Timestamp;
     status: AppointmentStateType;
-    validFor?: { startDate?: Date, endDate?: Date };
+    validFor?: { startDate?: Timestamp, endDate?: Timestamp };
 
     // telefoncím, email, skypeazonosító, akármi
-    contactMediums?: { name: string, value: string };
+    contactMediums?: [{ name: string, value: string }];
 
     // nevek
     relatedEntities?: string[];

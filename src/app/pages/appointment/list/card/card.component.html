@@ -1,1 +1,5 @@
-<p>card works!</p>
+<div class="container">
+  <ng-container *ngFor="let appointment of appointments | async">
+    <app-display [appointment]="appointment"></app-display>
+  </ng-container>
+</div>

@@ -1,12 +1,12 @@
-import { TableComponent } from './table.component';
+import { CardComponent } from './card.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
     {
         path: '',
-        component: TableComponent,
-        data: { title: 'Appointments table' }
+        component: CardComponent,
+        data: { title: 'Appointments card' }
     }
 ];
 
@@ -14,4 +14,4 @@ const routes: Routes = [
     imports: [RouterModule.forChild(routes)],
     exports: [RouterModule],
 })
-export class TableRoutingModule { }
+export class CardRoutingModule { }
