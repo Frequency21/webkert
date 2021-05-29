@@ -5,6 +5,7 @@ import { CardRoutingModule } from './card-routing.module';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { DisplayModule } from './display/display.module';
+import { AddModule } from '../../add/add.module';
 
 
 
@@ -14,7 +15,8 @@ import { DisplayModule } from './display/display.module';
     CommonModule,
     CardRoutingModule,
     MatDialogModule,
-    DisplayModule
+    DisplayModule,
+    AddModule
   ],
   providers: [DatePipe]
 })

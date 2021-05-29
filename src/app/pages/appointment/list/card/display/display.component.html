@@ -33,7 +33,7 @@
       </ng-template>
       <li>
         <ng-container *ngIf="appointment.validFor.startDate; else noStartDate">
-          Starting at: {{appointment.validFor.startDate.toMillis() | date: 'dd/MM/yyyy HH:mm'}}
+          Starting at: {{appointment.validFor.startDate.getTime() | date: 'dd/MM/yyyy HH:mm'}}
         </ng-container>
         <ng-template #noStartDate>
           No starting date
@@ -42,7 +42,7 @@
 
       <li>
         <ng-container *ngIf="appointment.validFor.endDate; else noEndDate">
-          Ending at: {{appointment.validFor.endDate.toMillis() | date: 'dd/MM/yyyy HH:mm'}}
+          Ending at: {{appointment.validFor.endDate.getTime() | date: 'dd/MM/yyyy HH:mm'}}
         </ng-container>
         <ng-template #noEndDate>
           No ending date
@@ -50,7 +50,7 @@
       </li>
       
       <li>
-        Last update: {{appointment.lastUpdate.toMillis() | date: 'dd/MM/yyyy HH:mm'}}
+        Last update: {{appointment.lastUpdate.getTime() | date: 'dd/MM/yyyy HH:mm'}}
       </li>
     </ul>
   </mat-card-content>
