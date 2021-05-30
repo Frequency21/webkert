@@ -8,6 +8,14 @@ const routes: Routes = [
     loadChildren: () => import('./pages/appointment/list/list.module').then(m => m.ListModule),
   },
   {
+    path: 'appointment/add',
+    loadChildren: () => import('./pages/appointment/add/add.module').then(m => m.AddModule),
+  },
+  {
+    path: 'appointment/edit',
+    loadChildren: () => import('./pages/appointment/edit/edit.module').then(m => m.EditModule),
+  },
+  {
     path: 'home',
     loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule),
   },

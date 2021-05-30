@@ -2,6 +2,7 @@ import { AppointmentStateType } from "./appointment-statetype.model";
 
 import firebase from 'firebase/app';
 import Timestamp = firebase.firestore.Timestamp;
+// ahol Timestamp-ről Date-re konvertálunk, ott kelleni fog
 export { Timestamp };
 
 export interface Appointment {

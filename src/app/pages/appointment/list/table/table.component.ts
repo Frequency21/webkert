@@ -4,7 +4,7 @@ import { Appointment } from 'src/app/models/appointment.model';
 import { FbBaseService } from 'src/app/services/fb-base.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DatePipe } from '@angular/common';
-import { AppointmentStateType } from 'src/app/models/appointment-statetype.model';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -18,14 +18,13 @@ export class TableComponent implements OnInit {
   dataSource: Appointment[] = null;
   displayedColumns: string[] = ['category', 'status', 'startDate', 'endDate', 'description', 'contactMediums', 'relatedEntities', 'lastUpdate', 'actions']
 
-  constructor(private service: FbBaseService<Appointment>, private dialog: MatDialog, private datePipe: DatePipe) { }
+  constructor(private service: FbBaseService<Appointment>, private router: Router, private datePipe: DatePipe) { }
 
   ngOnInit(): void {
     this.getAll();
     this.list.subscribe(
       list => {
         this.dataSource = list;
-        console.log(list);
       }
     );
   }
@@ -36,9 +35,15 @@ export class TableComponent implements OnInit {
 
   getHourAndMin(t: number): string {
     if (t === 0) return "none"
-    console.log(t);
-    /* elkapja event */
     return this.datePipe.transform(t, 'shortTime');
+  }
+
+  edit(id: string) {
+    this.router.navigateByUrl('/appointment/edit/' + id);
+  }
+
+  delete(id: string) {
+    this.service.delete('appointments', id);
   }
 
 }

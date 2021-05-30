@@ -48,17 +48,17 @@
           No ending date
         </ng-template>
       </li>
-      
+
       <li>
         Last update: {{appointment.lastUpdate.getTime() | date: 'dd/MM/yyyy HH:mm'}}
       </li>
     </ul>
   </mat-card-content>
   <mat-card-actions>
-    <button mat-icon-button>
+    <button mat-icon-button (click)="edit(appointment.id)">
       <mat-icon>edit</mat-icon>
     </button>
-    <button mat-icon-button>
+    <button mat-icon-button (click)="delete(appointment.id)">
       <mat-icon>delete</mat-icon>
     </button>
   </mat-card-actions>

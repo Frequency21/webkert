@@ -1,58 +1,55 @@
 import { Component, OnInit } from '@angular/core';
-import { Location } from '@angular/common';
+import { Location } from "@angular/common";
 import { Appointment } from 'src/app/models/appointment.model';
 import { FbBaseService } from 'src/app/services/fb-base.service';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { getAppointmentForm } from 'src/app/shared/forms/appointment.form';
-import { Observable } from 'rxjs';
 import { AppointmentStateType, AppointmentStateTypeLabelMapping } from 'src/app/models/appointment-statetype.model';
+import { ActivatedRoute } from '@angular/router';
+
 
 @Component({
-  selector: 'app-add',
-  templateUrl: './add.component.html',
-  styleUrls: ['./add.component.scss']
+  selector: 'app-edit',
+  templateUrl: './edit.component.html',
+  styleUrls: ['./edit.component.scss']
 })
-export class AddComponent implements OnInit {
+export class EditComponent implements OnInit {
 
-  form: FormGroup = getAppointmentForm();
-  appointments: Observable<Appointment[]>;
   appointment: Appointment;
-  states = Object.values(AppointmentStateType).filter(val => typeof val === 'number');
+  form: FormGroup = getAppointmentForm();
   public AppointmentStateTypeLabelMapping = AppointmentStateTypeLabelMapping;
+  states = Object.values(AppointmentStateType).filter(val => typeof val === 'number');
 
-  constructor(private service: FbBaseService<Appointment>, private location: Location) { }
+  constructor(private service: FbBaseService<Appointment>, private route: ActivatedRoute, private location: Location) { }
 
   ngOnInit(): void {
-    // this.getAll();
-  }
-
-
-  getAll() {
-    this.appointments = this.service.getAll('appointments');
-    this.appointments.subscribe(res => {
-      this.appointment = res[1];
-
-      Object.entries(this.appointment).forEach(item => {
-        if (item && item[1] && Array.isArray(item[1])) {
-          (this.form.get(item[0]) as FormArray).clear();
-          for (let i = 0; i < item[1].length; ++i) {
-            if (typeof item[1][i] === 'object') {
-              let formGroup = new FormGroup({});
-              Object.entries(item[1][i]).forEach( (attr) => {
-                formGroup.addControl(attr[0], new FormControl(attr[1]));
-              });
-              (this.form.get(item[0]) as FormArray).push(formGroup);
-            } else {
-              (this.form.get(item[0]) as FormArray).push(new FormControl(item[1][i]));
-            }
-          }
-        }
-      });
-      
-      this.form.patchValue(this.appointment);
-
+    const params = this.route.snapshot.params;
+    this.service.getById('appointments', params?.id).subscribe(res => {
+      this.appointment = res;
+      this.patchForm();
     });
   }
+
+  patchForm() {
+    Object.entries(this.appointment).forEach(item => {
+      if (item && item[1] && Array.isArray(item[1])) {
+        (this.form.get(item[0]) as FormArray).clear();
+        for (let i = 0; i < item[1].length; ++i) {
+          if (typeof item[1][i] === 'object') {
+            let formGroup = new FormGroup({});
+            Object.entries(item[1][i]).forEach((attr) => {
+              formGroup.addControl(attr[0], new FormControl(attr[1]));
+            });
+            (this.form.get(item[0]) as FormArray).push(formGroup);
+          } else {
+            (this.form.get(item[0]) as FormArray).push(new FormControl(item[1][i]));
+          }
+        }
+      }
+    });
+    this.form.patchValue(this.appointment);
+  };
+
 
   get getRelatedEntities(): FormArray {
     return this.form.get('relatedEntities') as FormArray;
@@ -66,25 +63,25 @@ export class AddComponent implements OnInit {
     let formGroup = new FormGroup({});
     formGroup.addControl('name', new FormControl());
     formGroup.addControl('value', new FormControl());
-    this.appointment?.contactMediums.push({name: '', value: ''});
+    this.appointment.contactMediums.push({ name: '', value: '' });
     (this.form.get('contactMediums') as FormArray).push(formGroup);
   }
 
   removeMedium(i: number) {
     let contactMediums = this.form.get('contactMediums') as FormArray;
     contactMediums.removeAt(i);
-    this.appointment?.contactMediums.splice(i, 1);
+    this.appointment.contactMediums.splice(i, 1);
   }
 
   addParticipant() {
-    this.appointment?.relatedEntities.push('');
+    this.appointment.relatedEntities.push('');
     (this.form.get('relatedEntities') as FormArray).push(new FormControl('', Validators.required));
   }
 
   removeParticipant() {
     let relatedEntities = this.form.get('relatedEntities') as FormArray;
     relatedEntities.removeAt(relatedEntities.length - 1);
-    this.appointment?.relatedEntities.pop();
+    this.appointment.relatedEntities.pop();
   }
 
   back() {
@@ -95,7 +92,7 @@ export class AddComponent implements OnInit {
     if (this.form.valid) {
       let appointment: Appointment = this.form.value;
       appointment.lastUpdate = new Date();
-      this.service.add('appointments', appointment).then(console.log);
+      this.service.update('appointments', this.appointment.id, appointment).then(console.log);
       this.back();
     }
   }

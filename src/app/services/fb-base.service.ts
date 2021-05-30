@@ -10,32 +10,32 @@ import { map } from 'rxjs/operators';
 })
 export class FbBaseService<T extends { id?: string }> {
 
+  // convert timestamps to dates
   public static convertDate(firebaseObject: any) {
     if (!firebaseObject) return null;
 
     for (const [key, value] of Object.entries(firebaseObject)) {
-
-      // covert items inside array
       if (value && Array.isArray(value)) {
-        // console.log('inside array', key, value);
         firebaseObject[key] = value.map(item => this.convertDate(item));
       }
-
-      // convert inner objects
       if (value && typeof value === 'object') {
-        // console.log('nevermind', key, value);
         firebaseObject[key] = this.convertDate(value);
       }
-
-      // convert simple properties
       if (value && value.hasOwnProperty('seconds')) {
-        // console.log(key, value, 'catch ya')
         firebaseObject[key] = (value as Timestamp).toDate();
       }
     }
     return firebaseObject;
   }
 
+  constructor(private afs: AngularFirestore) { }
+
+  async add(collectionName: string, data: T, id?: string): Promise<string> {
+    const uid = id ? id : this.afs.createId();
+    data.id = uid;
+    await this.afs.collection(collectionName).doc(uid).set(data);
+    return uid;
+  }
 
   getAll(collectionName: string): Observable<T[]> {
     return this.afs.collection(collectionName).valueChanges().pipe(
@@ -43,9 +43,24 @@ export class FbBaseService<T extends { id?: string }> {
     ) as Observable<T[]>;
   }
 
-  constructor(private afs: AngularFirestore) { }
-
   get(collectionName: string, id: string): Observable<any> {
-    return this.afs.collection(collectionName).doc(id).valueChanges();
+    return this.afs.collection(collectionName).doc(id).valueChanges().pipe(
+      map((data: any) => FbBaseService.convertDate(data))
+    );
   }
+
+  getById(collectionName: string, id: string): Observable<any> {
+    return this.afs.collection(collectionName).doc(id).valueChanges().pipe(
+      map((data: any) => FbBaseService.convertDate(data))
+    );
+  }
+
+  update(collectionName: string, id: string, data: T): Promise<void> {
+    return this.afs.collection(collectionName).doc(id).update(data);
+  }
+
+  delete(collectionName: string, id: string): Promise<void> {
+    return this.afs.collection(collectionName).doc(id).delete();
+  }
+
 }

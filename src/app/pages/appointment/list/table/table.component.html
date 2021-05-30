@@ -68,11 +68,11 @@
 
   <ng-container matColumnDef="actions">
     <th mat-header-cell *matHeaderCellDef></th>
-    <td mat-cell *matCellDef>
-      <button mat-icon-button>
+    <td mat-cell *matCellDef="let appointment">
+      <button mat-icon-button (click)="edit(appointment.id)">
         <mat-icon>edit</mat-icon>
       </button>
-      <button mat-icon-button>
+      <button mat-icon-button (click)="delete(appointment.id)">
         <mat-icon>delete</mat-icon>
       </button>
     </td>
