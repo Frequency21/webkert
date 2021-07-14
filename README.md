@@ -1,4 +1,18 @@
-# Projekt
+# Webfejlesztési keretrendszerek
+
+## Rövid ismertető
+
+Ez a projekt egy egyetemi kurzus keretein belül készült el. Célja a webfejlesztéshez szükséges keretrendszerek ismertetése, főképp az angular megismerése és használata.
+
+A kurzus során egy egyszerű webalkalmazást kellett elkészíteni, mely során valamilyen modelhez kellett CRUD műveleteket megvalósítani. Én a TMForum Appointment API-ját választottam.
+A követelményspecifikáció az alábbi linkeken érhető el:
+
+https://docs.google.com/document/d/1bO42UniL3ymlsnxUJFY2t2Uvd1h8Fvzg3cEN8A7wvFM/edit
+https://docs.google.com/spreadsheets/d/1o2ibl6CIruephI7UDtlAbnq7C2E83U-r7ULQWOzLsu8/edit#gid=0
+
+---
+
+# Angular által generált readme
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.1.6.
 
